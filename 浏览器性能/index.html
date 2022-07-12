@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    window.onload = function() {
+      // domainLookupStart: 为域名开始解析之时的 Unix 毫秒时间戳
+      // domainLookupEnd: 为解析域名结束时的 Unix 毫秒时间戳
+      const start = window.performance.timing.domainLookupStart;
+      const end = window.performance.timing.domainLookupEnd;
+      console.log('domain', end - start)
+      // dom的加载时间解析
+      const domLoading = window.performance.timing.domLoading;
+      const domComplete = window.performance.timing.domComplete;
+      console.log(window.performance.timing)
+      console.log('dom加载速度：', domComplete - domLoading);
+      // 新的api
+      const entries = window.performance.getEntries();
+      console.log(entries, '==>>entries')
+      // 页面首次加载
+      const fp = window.performance.getEntriesByType('paint');
+      console.log(fp)
+      // 页面监听的方案
+      // PerformanceObserver
+      function observer_callback(list, observer) {
+        list.getEntries().forEach(e => {
+          console.log('observer', e)
+        })
+      }
+
+      let observer = new PerformanceObserver(observer_callback)
+      observer.observe({entryTypes: ['paint', 'resource', 'mark']}) // 后面的数组就是监控资源的加载时间
+
+      window.performance.mark('own')
+    }
+  </script>
+  <script>
+    function addDiv() {
+      window.performance.mark('start');
+      const div = document.createElement('div');
+      div.innerHTML = 'text'
+      document.body.appendChild(div);
+      window.performance.mark('end');
+    }
+  </script>
+  <div>1111</div>
+  <button onclick="addDiv()">添加div</button>
+</body>
+</html>
