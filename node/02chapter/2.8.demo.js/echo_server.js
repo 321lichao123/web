@@ -2,7 +2,7 @@ const net = require('net')
 
 net.createServer(socket => {
   socket.on('data', data => {
-    console.log(JSON.parse(data))
-    socket.write(data)
+    console.log(data.toString());
+    socket.write(data.toString())
   })
 }).listen(8888)
