@@ -218,3 +218,48 @@ const fd = await open('sample.txt');
 fd.createReadStream({ start: 90, end: 99 });
 ```
 
+```js
+import fs from 'node:fs/promises';
+
+let filehandle;
+try {
+  filehandle = await fs.open('./data/input.txt', 'r')
+  let stream = filehandle.createReadStream()
+  stream.on('data', data => {
+    console.log(data.toString());  // 文件内容
+  })
+
+  stream.on('end', () => {
+    console.log('文件读取结束');
+  })
+} catch(error) {
+  console.log(error)
+} finally {
+}
+```
+
+##### filehandle.createWriteStream([options])
+
+- options: <object>
+  - encoding: <string> **Default**: 'utf-8'
+  - autoClose: <boolean> **Default**: true
+  - emitClose: <boolean> **Default**: true
+  - start: <integer>
+- Return: <fs.WriteStream>
+
+`options` may also include a `start` option to allow writing data at some position past the beginning of the file, allowed values are in the [0, [`Number.MAX_SAFE_INTEGER`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)] range. Modifying a file rather than replacing it may require the `flags` `open` option to be set to `r+` rather than the default `r`. The `encoding` can be any one of those accepted by [](https://nodejs.org/api/buffer.html#class-buffer).
+
+选项还可能包括一个开始选项，允许在文件开始后的某个位置写入数据，允许的值在[0，Number.MAX _ SAFE _ INTEGER ]范围。修改文件而不是替换它可能需要将标志打开选项设置为 r + 而不是默认的 r。编码可以是 < Buffer > 接受的任何一种编码。
+
+If `autoClose` is set to true (default behavior) on `'error'` or `'finish'` the file descriptor will be closed automatically. If `autoClose` is false, then the file descriptor won't be closed, even if there's an error. It is the application's responsibility to close it and make sure there's no file descriptor leak.
+
+如果“ error”或“ Finish”上的 autoClose 设置为 true (默认行为) ，文件描述符将自动关闭。如果 autoClose 为 false，那么即使出现错误，文件描述符也不会关闭。应用程序有责任关闭它，并确保没有文件描述符泄漏。
+
+By default, the stream will emit a `'close'` event after it has been destroyed. Set the `emitClose` option to `false` to change this behavior.
+
+默认情况下，流在被销毁后将发出一个“关闭”事件。将 emitClose 选项设置为 false 以更改此行为
+
+```js
+
+```
+
