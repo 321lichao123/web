@@ -61,3 +61,4 @@ queue.enqueue('lisi')
 
 console.log(queue.toString());
 
+module.exports = Queue

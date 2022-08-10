@@ -23,11 +23,7 @@ class Deque {
     if(this.isEmpty()) {
       return ''
     }
-    let str = `${this.queue[this.lowestCount]}`
-    for(let i = this.lowestCount + 1; i < this.count; i++) {
-      str = `${str},${this.queue[i]}`
-    }
-    return str
+    return Object.values(this.queue).join(',')
   }
   // 向双端队列后面添加元素
   addBack(element) {
@@ -51,4 +47,58 @@ class Deque {
       this.count++
     }
   }
+  // 删除双端队列的第一个元素
+  removeFront() {
+    if(this.isEmpty()) {
+      return undefined
+    }
+    const result = this.queue[this.lowestCount]
+    delete this.queue[this.lowestCount]
+    this.lowestCount = Object.keys(this.queue)[0]
+    return result
+  }
+  // 删除双端队列的最后一个元素
+  removeBack() {
+    if(this.isEmpty()) {
+      return undefined
+    }
+    const result = this.queue[this.count]
+    delete this.queue[this.count]
+    this.count--
+    return result
+  }
+  // 获取双端队列的栈顶元素
+  peekFront() {
+    if(this.isEmpty()) {
+      return undefined
+    }
+    return this.queue(this.lowestCount)
+  }
+  // 获取双端队列的最后元素
+  peekBack() {
+    if(this.isEmpty()) {
+      return undefined
+    }
+    return this.queue[this.count]
+  }
 }
+
+const queue = new Deque()
+console.log(queue.size());
+
+queue.addBack('John')
+queue.addBack('Jack')
+
+console.log(queue.toString());
+
+queue.addBack('Camila')
+console.log(queue.toString());
+
+console.log(queue.size());
+console.log(queue.isEmpty());
+
+queue.removeFront()
+
+console.log(queue.toString());
+
+module.exports = Deque
