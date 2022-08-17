@@ -153,6 +153,12 @@ class DoublyLinkedList {
     return str
   }
 
+  clear() {
+    this.head = undefined
+    this.count = 0
+    this.tail = undefined
+  }
+
   // 获取指定索引的节点
   getElementAt(index) {
     if(index >= 0 && index < this.count) {
@@ -166,13 +172,18 @@ class DoublyLinkedList {
   }
 }
 
-let doublyLinkedList = new DoublyLinkedList()
+// let doublyLinkedList = new DoublyLinkedList()
 
-doublyLinkedList.push(5)
-doublyLinkedList.push(10)
-doublyLinkedList.push(15)
-doublyLinkedList.push(20)
-doublyLinkedList.insert(16, 2)
+// doublyLinkedList.push(5)
+// doublyLinkedList.push(10)
+// doublyLinkedList.push(15)
+// doublyLinkedList.push(20)
+// doublyLinkedList.insert(16, 2)
 
-console.log(doublyLinkedList);
-console.log(doublyLinkedList.toString());
+// console.log(doublyLinkedList.toString());
+
+// doublyLinkedList.removeAt(3)
+
+// console.log(doublyLinkedList.toString());
+
+module.exports = DoublyLinkedList

@@ -155,7 +155,7 @@ class LinkedList {
   getElementAt(index) {
     if(index >= 0 && index < this.count) {
       let node = this.head
-      for(let i = 0; i < index && node !== null; i++) {
+      for(let i = 0; i < index && node != null; i++) {
         node = node.next
       }
       return node
@@ -165,14 +165,14 @@ class LinkedList {
 
 }
 
-const link = new LinkedList()
+// const link = new LinkedList()
 
-link.push(5)
-link.push(8)
-link.push(10)
-link.push(12)
+// link.push(5)
+// link.push(8)
+// link.push(10)
+// link.push(12)
 // let removeAtItem = link.removeAt(1)
-link.insert(7, 2)
+// link.insert(7, 2)
 // let indexItem = link.indexOf(7)
 // let remove = link.remove(10)
 
@@ -182,4 +182,6 @@ link.insert(7, 2)
 // console.log(indexItem);
 // console.log(remove);
 // console.log(link);
-console.log(link.toString());
+// console.log(link.toString());
+
+module.exports = LinkedList
