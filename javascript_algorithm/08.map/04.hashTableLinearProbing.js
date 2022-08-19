@@ -83,7 +83,39 @@ class HashTable{
   }
 
   remove(key) {
-    
+    let position = this.hashCode(key)
+    if(this.table[position] != null) {
+      if(this.table[position].key === key) {
+        delete this.table[position]
+        this.verifyRemoveSideEffect(key, position)
+        return true
+      } else {
+        let index = position + 1
+        while(this.table[index] != null && this.table[index].key !== key) {
+          index++
+        }
+        if(this.table[index] != null && this.table[index].key === key) {
+          delete this.table[index]
+          this.verifyRemoveSideEffect(key, index)
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  verifyRemoveSideEffect(key, removePosition) {
+    const hash = this.hasKey(key)
+    let index = removePosition + 1
+    while(this.table[index] != null) {
+      const posHash = this.table[index].key
+      if(posHash <= hash || posHash <= removePosition) {
+        this.table[removePosition] = this.table[index]
+        delete this.table[index]
+        removePosition = index
+      }
+      index++
+    }
   }
   
   getKeys() {
@@ -112,7 +144,7 @@ class HashTable{
     let keys = Object.keys(this.table).map(Number)
     let str = `{${keys[0]} => ${this.table[keys[0]].toString()}}`
     for(let i = 1; i < keys.length; i++) {
-      str = `${str},{${keys[i]} => ${this.table[keys[0]]}}`
+      str = `${str},{${keys[i]} => ${this.table[keys[i]]}}`
     }
     return str
   }
@@ -136,3 +168,7 @@ hash.put('Sargeras', 'sargeras@email.com');
 console.table(hash.toString());
 
 console.log(hash.get('Jake'));
+
+hash.remove('Nathan')
+
+console.table(hash.toString());
