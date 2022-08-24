@@ -168,6 +168,55 @@ class BinarySearchTree {
       return true
     }
   }
+
+  // 移除某个节点
+  remove(key) {
+    this.root = this.removeNode(this.root, key)
+  }
+
+  removeNode(node, key) {
+    if(node === null) {
+      return null
+    }
+    // 如果需要删除的key比当前节点小
+    if(this.compareFn(key, node.key) === Compare.LESS_THAN) {
+      // 则递归左节点查找需要删除的节点
+      node.left = this.removeNode(node.left, key)
+      return node
+    } else if (this.compareFn(key, node.key) === Compare.BIGGER_THEN) {
+      // 如果需要删除的key比当前的节点大
+      // 则递归右节点查找需要删除的节点
+      node.right = this.removeNode(node.right, key)
+      return node
+    } else {
+      // 如果节点的key等于需要删除的key
+      if(node.key === key) {
+        // 删除的叶子节点
+        if(node.left === null && node.right === null) {
+          node = null
+          return node
+        } else if (node.left === null && node.right != null) {
+          // 如果删除的节点没有左节点, 只有右节点
+          node = node.right
+          return node
+        } else if (node.right === null && node.left !== null) {
+           // 如果删除的节点没有右节点, 只有左节点
+          node = node.left
+          return node
+        } else {
+          // 如果删除的节点有左右节点
+          // 查找右节点最小的key
+          const aux = this.minNode(node.right, key)
+          // 将最小的key替换需要删除的节点
+          node.key = aux.key
+          // 删除最小的key
+          this.removeNode(node.right, aux.key)
+          // 返回新的node
+          return node
+        }
+      }
+    }
+  }
 }
 
 const tree = new BinarySearchTree()
