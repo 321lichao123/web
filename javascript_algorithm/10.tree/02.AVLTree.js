@@ -101,4 +101,100 @@ class AVLTree {
     node.right = this.rotationLL(node.right); 
     return this.rotationRR(node);
   }
+
+  insert(key) {
+    this.root = this.insertNode(this.root, key)
+  }
+
+  insertNode(node, key) {
+    // 判断插入的位置
+    if(node === null) {
+      return new Node(key)
+    } else if(this.compareFn(key, node.key) ===  Compare.LESS_THAN) {
+      node.left = this.insertNode(node.left, key)
+    } else if(this.compareFn(key, node.key) === Compare.BIGGER_THEN) {
+      node.right = this.insertNode(node.right, key)
+    } else {
+      return node
+    }
+    // 判断插入的文件是否需要平衡树
+    const balanceFactor = this.getBalanceFactor(node)
+    if(balanceFactor === BalanceFactor.UNBALANCED_LEFT) {
+      if(this.compareFn(key, node.left.key) === Compare.LESS_THAN) {
+        node = this.rotationLL(node)
+      } else {
+        return this.rotationLR(node)
+      }
+    } else if (balanceFactor === BalanceFactor.UNBALANCED_RIGHT) {
+      if(this.compareFn(key, node.right.key) === Compare.BIGGER_THEN) {
+        node = this.rotationRR(node)
+      } else {
+        return this.rotationRL(node)
+      }
+    }
+    return node
+  }
+
+  remove(node, key) {
+    if(node === null) {
+      return false
+    }
+    if(this.compareFn(key, node.key) === Compare.LESS_THAN) {
+      node.left = this.remove(node.left, key)
+      return node
+    } else if (this.compareFn(key, node.key) === Compare.BIGGER_THEN) {
+      node.right = this.remove(node.right, key)
+      return node
+    } else {
+      if(node.left === null && node.right === null) {
+        node = null
+        return node
+      } else if (node.left !== null && node.right === null) {
+        node = node.left
+        return node
+      } else if (node.right !== null && node.left === null) {
+        node = node.right
+        return node
+      } else {
+        const aux = this.minNode(node.right)
+        node.key = aux.key
+        this.remove(node.right, aux.key)
+        return node
+      }
+    }
+  }
+
+  removeNode(key) {
+    let node = this.remove(this.root, key)
+    if(node === null) {
+      return node
+    }
+    const balanceFactor = this.getBalanceFactor(node)
+    if(balanceFactor === BalanceFactor.UNBALANCED_LEFT) {
+      const balanceFactorLeft = this.getBalanceFactor(node.left)
+      if(balanceFactorLeft === BalanceFactor.BALANCE || balanceFactorLeft === BalanceFactor.SLIGHTLY_UNBALANCED_LEFT) {
+        return this.rotationLL(node)
+      }
+      if(balanceFactorLeft === BalanceFactor.SLIGHTLY_UNBALANCED_RIGHT) {
+        return this.rotationLR(node.left)
+      }
+    } else if (balanceFactor === BalanceFactor.UNBALANCED_RIGHT) {
+      const balanceFactorRight = this.getBalanceFactor(node.right)
+      if(balanceFactorRight === BalanceFactor.BALANCED || balanceFactorRight === BalanceFactor.SLIGHTLY_UNBALANCED_RIGHT) {
+        return this.rotationRR(node)
+      }
+      if(balanceFactorRight === BalanceFactor.SLIGHTLY_UNBALANCED_LEFT) {
+        return this.rotationRL(node.right)
+      }
+    }
+    return node
+  }
+
+  minNode(node) {
+    let current = node
+    while(current !== null && current.left !== null) {
+      current = current.left
+    }
+    return current
+  }
 }
