@@ -1,13 +1,14 @@
 const Compare = {
   LESS_THAN: -1,
-  BIGGER_THEN: 1
+  BIGGER_THEN: 1,
+  EQUALS: 0
 }
 
 
 // 用于比较节点值是否相等
 function defaultCompare(a, b) {
   if(a === b) {
-    return 0
+    return Compare.EQUALS
   }
   return a < b ? Compare.LESS_THAN : Compare.BIGGER_THEN
 }
@@ -26,12 +27,12 @@ class MinHeap {
 
   // 获取左节点索引
   getLeftIndex(index) {
-    return 2 * index + 1
+    return (2 * index) + 1
   }
 
   // 获取右节点索引
   getRightIndex(index) {
-    return 2 * index + 2
+    return (2 * index) + 2
   }
 
   // 获取父节点索引
@@ -42,14 +43,34 @@ class MinHeap {
     return Math.floor((index - 1) / 2)
   }
 
+  // 返回二叉堆的长度
+  size() {
+    return this.heap.length
+  }
+
+  // 判断二叉堆是否为空
+  isEmpty() {
+    return this.size() <= 0
+  }
+
+  clear() {
+    this.heap = []
+  }
+
+  // 返回最小值
+  findMininum() {
+    return this.isEmpty() ? undefined : this.heap[0]
+  }
+
   // 插入值
   insert(value) {
     // 判断插入的值是否是null
     if(value !== null) {
+       const index = this.heap.length
       // 如果不是null,则直接插入到数组的最后面
       this.heap.push(value)
       // 判断插入的值跟父节点的值比较
-      this.siftUp(this.heap.length - 1)
+      this.siftUp(index)
       return true
     }
     return false
@@ -71,21 +92,6 @@ class MinHeap {
     }
   }
 
-  // 返回二叉堆的长度
-  size() {
-    return this.heap.length
-  }
-
-  // 判断二叉堆是否为空
-  isEmpty() {
-    return this.size() === 0
-  }
-
-  // 返回最小值
-  findMininum() {
-    return this.isEmpty() ? undefined : this.heap[0]
-  }
-
   // 移除最小值
   extract() {
     // 如果堆为空，则直接返回undefined
@@ -97,7 +103,9 @@ class MinHeap {
       this.heap.unshift()
     }
     // 需要移除的值
-    const removeValue = this.heap.unshift()
+    const removeValue = this.heap[0]
+    // 重新设置头部
+    this.heap[0] = this.heap.pop()
     // 下移操作
     this.siftDown(0)
     // 返回删除的值
