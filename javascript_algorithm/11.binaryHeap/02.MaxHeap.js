@@ -4,7 +4,6 @@ const Compare = {
   EQUALS: 0
 }
 
-
 // 用于比较节点值是否相等
 function defaultCompare(a, b) {
   if(a === b) {
@@ -13,16 +12,23 @@ function defaultCompare(a, b) {
   return a < b ? Compare.LESS_THAN : Compare.BIGGER_THEN
 }
 
+// 反向对比
+function reverseCompare(callback) {
+  return (a, b) => callback(b, a)
+}
+
+// 交换值
 function swap(arr, a, b) {
   let temp = arr[a]
   arr[a] = arr[b]
   arr[b] = temp 
 }
 
-class MinHeap {
+class MaxHeap{
   constructor(compareFn = defaultCompare) {
     this.heap = []
     this.compareFn = compareFn
+    this.reverseCompare = reverseCompare
   }
 
   // 获取左节点索引
@@ -43,12 +49,10 @@ class MinHeap {
     return Math.floor((index - 1) / 2)
   }
 
-  // 返回二叉堆的长度
   size() {
     return this.heap.length
   }
 
-  // 判断二叉堆是否为空
   isEmpty() {
     return this.size() <= 0
   }
@@ -57,104 +61,94 @@ class MinHeap {
     this.heap = []
   }
 
-  // 返回最小值
-  findMininum() {
+  findMinimum() {
     return this.isEmpty() ? undefined : this.heap[0]
   }
 
-  // 插入值
   insert(value) {
-    // 判断插入的值是否是null
     if(value !== null) {
-       const index = this.heap.length
-      // 如果不是null,则直接插入到数组的最后面
+      const index = this.heap.length
       this.heap.push(value)
-      // 判断插入的值跟父节点的值比较
       this.siftUp(index)
       return true
     }
     return false
   }
 
-  // 上移操作
   siftUp(index) {
-    // 获取父节点的索引
     let parent = this.getParentIndex(index)
-    // 遍历比较子节点与父节点的值
-    // 判断子节点是否比父节点大
     while(index > 0 && this.compareFn(this.heap[parent], this.heap[index]) === Compare.BIGGER_THEN) {
-      // 如果子节点比父节点大
-      // 则交换子父节点值
       swap(this.heap, parent, index)
-      // 重新赋值index
       index = parent
-      // 计算新的父节点索引值
       parent = this.getParentIndex(index)
     }
   }
 
-  // 移除最小值
-  extract() {
-    // 如果堆为空，则直接返回undefined
-    if(this.isEmpty()) {
-      return undefined
-    }
-    // 如果堆只有一个值，则直接删除
-    if(this.size() === 1) {
-      this.heap.unshift()
-    }
-    // 需要移除的值
-    const removeValue = this.heap[0]
-    // 重新设置头部
-    this.heap[0] = this.heap.pop()
-    // 下移操作
-    this.siftDown(0)
-    // 返回删除的值
-    return removeValue
-  }
-
-  // 下移操作
+  // 下移
   siftDown(index) {
     let element = index
-    // 获取左右节点索引
     let left = this.getLeftIndex(index)
     let right = this.getRightIndex(index)
     let size = this.size()
-    // 判断当前元素与子节点的大小
+
     if(left < size && this.compareFn(this.heap[element], this.heap[left]) === Compare.BIGGER_THEN) {
-      // 如果当前元素比子节点小
-      // 将左节点赋值给当前索引
       element = left
     }
-    // 判断当前元素与右节点的大小
+
     if(right < size && this.compareFn(this.heap[element], this.heap[right]) === Compare.BIGGER_THEN) {
-      // 如果当前元素比子节点小
-      // 将左节点赋值给当前索引
       element = right
     }
-    // 排除与自己的对比
+
     if(element !== index) {
-      // 交换当前的子节点与父节点的值
       swap(this.heap, index, element)
-      // 递归，继续交换值
       this.siftDown(element)
     }
   }
 }
 
-const heap = new MinHeap()
+const maxHeap = new MaxHeap(); 
+maxHeap.insert(2); 
+maxHeap.insert(3); 
+maxHeap.insert(4); 
+maxHeap.insert(5); 
+maxHeap.insert(1); 
+console.log(maxHeap);
+console.log('Heap size: ', maxHeap.size()); // 5 
+console.log('Heap min value: ', maxHeap.findMinimum()); // 5
 
-// heap.insert(2)
-// heap.insert(3)
-// heap.insert(4)
-// heap.insert(5)
-for (let i = 1; i < 10; i++) { 
-  heap.insert(i); 
- }
+// 堆化
+function heapify(array) {
+  // 判断参数是否存在
+  if(array) {
+    this.heap = array
+  }
+  // 求中间的index
+  const maxIndex = Math.floor(this.size() / 2) - 1
+  // 遍历下移
+  for(let i = 0; i <= maxIndex; i++) {
+    this.siftDown(i)
+  }
+  return this.heap
+}
 
-console.log(heap);
+// 堆排序
+function sortHeap(array) {
+  let heapSize = array.length
+  // 用数组创建一个最大堆用作源数据
+  this.buildMaxHeap(array)
+  // 遍历堆
+  while(heapSize > -1) {
+    // 将堆的首项与尾项互换
+    swap(array, 0, --heapSize)
+    // 对数组堆化
+    heapify(array)
+  }
+}
 
-// heap.insert(1)
-console.log(heap.extract())
-
-console.log(heap);
+// 创建最大的堆
+function buildMaxHeap(array) {
+  for(let i = Math.floor(array.length / 2) - 1; i >= 0; i++) {
+    heapify(array, i, array.length, compareFn)
+  }
+  return array
+}
