@@ -45,11 +45,19 @@ const dijkstra = (graph, src) => {
   return dist
 }
 
-var graph = [[0, 2, 4, 0, 0, 0], 
- [0, 0, 1, 4, 2, 0], 
- [0, 0, 0, 0, 3, 0], 
- [0, 0, 0, 0, 0, 2], 
- [0, 0, 0, 3, 0, 2], 
- [0, 0, 0, 0, 0, 0]];
+var graph = [
+  [0, 2, 4, 0, 0, 0],
+  [0, 0, 2, 4, 2, 0],
+  [0, 0, 0, 0, 3, 0],
+  [0, 0, 0, 0, 0, 2],
+  [0, 0, 0, 3, 0, 2],
+  [0, 0, 0, 0, 0, 0]
+]
 
- console.log(dijkstra(graph));
+const dist = dijkstra(graph, 0)
+
+console.log(dist);
+
+for(let i = 0; i < dist.length; i++) {
+  console.log(i + '\t\t' + dist[i]);
+}
