@@ -37,7 +37,7 @@ const insertionSort = (arr, compareFn = defaultCompare) => {
       // 对临时索引变量递减，寻找当前项的合适位置
       j--
     }
-    // 将临时变量赋值给arr[j]
+    // j指向临时要插入的索引
     arr[j] = temp
   }
   return arr
